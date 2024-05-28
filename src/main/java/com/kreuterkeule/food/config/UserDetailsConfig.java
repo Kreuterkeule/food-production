@@ -1,5 +1,6 @@
 package com.kreuterkeule.food.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
@@ -14,16 +15,26 @@ import javax.sql.DataSource;
 @Configuration
 public class UserDetailsConfig {
 
+
+    @Autowired
+    private DataSource dataSource;
+
     @Bean
     UserDetailsManager users(DataSource dataSource) {
+        System.out.println();
         UserDetails defaultUser = User.builder()
                 .username("admin")
                 .password(this.passwordEncoder().encode("admin"))
                 .roles("ADMIN", "USER")
                 .build();
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        users.deleteUser(defaultUser.getUsername());
-        users.createUser(defaultUser);
+        try {
+            //users.deleteUser(defaultUser.getUsername());
+            users.createUser(defaultUser);
+        } catch (Exception e) {
+            System.out.println("database not yet initialized");
+            e.printStackTrace();
+        }
         return users;
     }
 

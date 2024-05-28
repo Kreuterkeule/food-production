@@ -19,8 +19,6 @@ public class AdminController {
     private UserDetailsManager users;
     @Autowired
     private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private boolean check() {
         return userService.getRoles().contains("ROLE_ADMIN");
@@ -31,21 +29,21 @@ public class AdminController {
         return new ResponseEntity<String>("200 OK", HttpStatus.OK);
     }
 
-    @PostMapping("/create/admin")
+    @PutMapping("/admin")
     public ResponseEntity<UserDetails> createAdmin(@RequestBody CreateAdminDto createAdminDto) {
         if (users.userExists(createAdminDto.username)) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         UserDetails user = userService.createAdmin(createAdminDto.username, createAdminDto.password);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/create/user")
+    @PutMapping("/user")
     public ResponseEntity<UserDetails> createUser(@RequestBody CreateAdminDto createAdminDto) {
         if (users.userExists(createAdminDto.username)) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         UserDetails user = userService.createUser(createAdminDto.username, createAdminDto.password);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/user")
+    @DeleteMapping(value = {"/user", "/admin"}) // works for admins too :)
     public ResponseEntity<UserDetails> deleteUser(@RequestParam("username") String username) {
         if (!users.userExists(username)) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         UserDetails user = userService.deleteUser(username);

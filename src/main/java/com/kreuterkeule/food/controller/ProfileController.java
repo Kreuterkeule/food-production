@@ -42,7 +42,7 @@ public class ProfileController {
         return new ResponseEntity<>(ue, HttpStatus.OK);
     }
 
-    @GetMapping("/token")
+    @GetMapping("/login")
     public ResponseEntity<String> token() {
         UserDetails ud = userService.getUser();
         String token = tokenUtil.generateToken(ud.getUsername());
