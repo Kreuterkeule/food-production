@@ -29,7 +29,12 @@ public class UserDetailsConfig {
                 .build();
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
         try {
-            //users.deleteUser(defaultUser.getUsername());
+            try {
+                users.deleteUser(defaultUser.getUsername());
+            } catch (Exception e) {
+                System.out.println("first initialization detected default user will be created, and can't be deleted before");
+                e.printStackTrace();
+            }
             users.createUser(defaultUser);
         } catch (Exception e) {
             System.out.println("database not yet initialized");

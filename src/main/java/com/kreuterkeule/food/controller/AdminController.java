@@ -1,6 +1,8 @@
 package com.kreuterkeule.food.controller;
 
 import com.kreuterkeule.food.dto.CreateAdminDto;
+import com.kreuterkeule.food.entity.UserEntity;
+import com.kreuterkeule.food.repository.UserRepository;
 import com.kreuterkeule.food.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -19,6 +23,8 @@ public class AdminController {
     private UserDetailsManager users;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     private boolean check() {
         return userService.getRoles().contains("ROLE_ADMIN");
@@ -50,4 +56,9 @@ public class AdminController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/users/all")
+    public ResponseEntity<List<UserEntity>> getUsersAll() {
+        List<UserEntity> userEntities = userRepository.findAll();
+        return new ResponseEntity<>(userEntities, HttpStatus.OK);
+    }
 }

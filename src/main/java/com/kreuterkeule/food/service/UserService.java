@@ -23,18 +23,18 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public UserDetails getUser() {
+    public UserDetails getAuthenticatedUser() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         return users.loadUserByUsername(name);
     }
 
-    public UserEntity getUserEntity() {
+    public UserEntity getAuthenticatedUserEntity() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(name).orElse(null);
     }
 
     public List<String> getRoles() {
-        UserDetails user = this.getUser();
+        UserDetails user = this.getAuthenticatedUser();
         return user.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.toList());
     }
 
@@ -47,12 +47,17 @@ public class UserService {
     }
 
     public UserDetails createUser(String username, String password, String email) {
-        if (users.userExists(username)) return null;
-        UserDetails user = User.builder().password(passwordEncoder.encode(password)).username(username).roles("USER").build();
-        users.createUser(user);
-        UserEntity ue = new UserEntity(username);
-        ue.setEmail(email);
-        userRepository.save(ue);
+        UserDetails user = null;
+        try {
+            if (users.userExists(username)) return null;
+            user = User.builder().password(passwordEncoder.encode(password)).username(username).roles("USER").build();
+            users.createUser(user);
+            UserEntity ue = new UserEntity(username);
+            ue.setEmail(email);
+            userRepository.save(ue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return user;
     }
 

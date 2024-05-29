@@ -24,7 +24,7 @@ public class ProfileController {
 
     @GetMapping("/getInfo")
     public ResponseEntity<UserEntity> getInfo() {
-        UserDetails ud = userService.getUser();
+        UserDetails ud = userService.getAuthenticatedUser();
         UserEntity ue = userRepository.findByUsername(ud.getUsername()).orElse(null);
         if (ue == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -34,17 +34,21 @@ public class ProfileController {
 
     @PostMapping("/register")
     public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDto registerUserDto) {
+        System.out.println(registerUserDto);
         UserDetails ud = userService.createUser(registerUserDto.username, registerUserDto.password, registerUserDto.email);
+        if (ud == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        System.out.println(ud.getUsername());
         UserEntity ue = userRepository.findByUsername(ud.getUsername()).orElse(null);
         if (ue == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+        System.out.println(ue.getUsername());
         return new ResponseEntity<>(ue, HttpStatus.OK);
     }
 
     @GetMapping("/login")
     public ResponseEntity<String> token() {
-        UserDetails ud = userService.getUser();
+        UserDetails ud = userService.getAuthenticatedUser();
         String token = tokenUtil.generateToken(ud.getUsername());
         System.out.println(token);
         return new ResponseEntity<>(token, HttpStatus.OK);

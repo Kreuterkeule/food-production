@@ -44,7 +44,7 @@ public class AppController {
 
     @GetMapping("own")
     public ResponseEntity<List<Recipe>> get_own() {
-        UserEntity user = userService.getUserEntity();
+        UserEntity user = userService.getAuthenticatedUserEntity();
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
@@ -52,13 +52,12 @@ public class AppController {
     }
     @GetMapping("saved")
     public ResponseEntity<List<Recipe>> get_saved() {
-        UserEntity user = userService.getUserEntity();
+        UserEntity user = userService.getAuthenticatedUserEntity();
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(user.getSaved_recipes(), HttpStatus.OK);
     }
-    // TODO: open for everyone
     @GetMapping("daily")
     public ResponseEntity<List<Recipe>> get_daily() {
         Page<Recipe> page = recipeRepository.findAll(
@@ -69,7 +68,7 @@ public class AppController {
     }
     @PutMapping("recipe")
     public ResponseEntity<Recipe> create_recipe(@RequestBody CreateRecipeDto recipeDto) {
-        UserEntity user = userService.getUserEntity();
+        UserEntity user = userService.getAuthenticatedUserEntity();
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
@@ -109,5 +108,17 @@ public class AppController {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(recipe, HttpStatus.OK);
+
+    }
+    @GetMapping("ingredients/all")
+    public ResponseEntity<List<Ingredient>> getIngredientsAll() {
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+        return new ResponseEntity<>(ingredients, HttpStatus.OK);
+    }
+
+    @GetMapping("recipe/all")
+    public ResponseEntity<List<Recipe>> getRecipesAll() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 }
