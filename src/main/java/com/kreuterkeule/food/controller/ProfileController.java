@@ -35,6 +35,7 @@ public class ProfileController {
     @PostMapping("/register")
     public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDto registerUserDto) {
         System.out.println(registerUserDto);
+        if (!userRepository.findByUsername(registerUserDto.username).isEmpty()) return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         UserDetails ud = userService.createUser(registerUserDto.username, registerUserDto.password, registerUserDto.email);
         if (ud == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         System.out.println(ud.getUsername());

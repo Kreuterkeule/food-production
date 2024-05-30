@@ -15,7 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 
@@ -37,15 +39,33 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.httpBasic(Customizer.withDefaults())
-                .csrf().disable()
+        http.
+                csrf().disable()
+                .exceptionHandling()
+                .and()
+                .httpBasic()
+                .and()
+                .cors(Customizer.withDefaults())
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((request) -> {
                     try {
                             request
-                                    .requestMatchers("/profile/register", "/app/daily").permitAll()
+                                    .requestMatchers(
+                                            "/profile/register",
+                                            "/app/daily",
+                                            "/v2/api-docs",
+                                            "/v3/api-docs",
+                                            "/v3/api-docs/**",
+                                            "/swagger-resources",
+                                            "/swagger-resources/**",
+                                            "/configuration/ui",
+                                            "/configuration/security",
+                                            "/swagger-ui/**",
+                                            "/webjars/**",
+                                            "/swagger-ui.html"
+                                    ).permitAll()
                                     .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                                     .and()
