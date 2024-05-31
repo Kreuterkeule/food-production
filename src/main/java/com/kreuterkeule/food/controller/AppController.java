@@ -9,6 +9,7 @@ import com.kreuterkeule.food.entity.UserEntity;
 import com.kreuterkeule.food.repository.IngredientRepository;
 import com.kreuterkeule.food.repository.RecipeRepository;
 import com.kreuterkeule.food.repository.UserRepository;
+import com.kreuterkeule.food.service.ImageService;
 import com.kreuterkeule.food.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,14 +34,16 @@ public class AppController {
     private RecipeRepository recipeRepository;
     private UserDetailsManager users;
     private UserService userService;
+    private ImageService imageService;
 
     @Autowired
-    public AppController(UserRepository userRepository, IngredientRepository ingredientRepository, RecipeRepository recipeRepository, UserDetailsManager userDetailsManager, UserService userService) {
+    public AppController(UserRepository userRepository, IngredientRepository ingredientRepository, RecipeRepository recipeRepository, UserDetailsManager userDetailsManager, UserService userService, ImageService imageService) {
         this.userRepository = userRepository;
         this.ingredientRepository = ingredientRepository;
         this.recipeRepository = recipeRepository;
         this.users = userDetailsManager;
         this.userService = userService;
+        this.imageService = imageService;
     }
 
     @GetMapping("own")
@@ -83,6 +87,21 @@ public class AppController {
     public ResponseEntity<Ingredient> create_ingredient(@RequestBody CreateIngredientDto ingredientDto) {
         Ingredient ingredient = new Ingredient(ingredientDto.name, ingredientDto.info, ingredientDto.calories_per_gram);
         return new ResponseEntity<>(ingredientRepository.save(ingredient), HttpStatus.CREATED);
+    }
+
+    @PutMapping("image")
+    public ResponseEntity<String> upload_image(@RequestParam("image")MultipartFile file) throws Exception {
+        String uploadDirectory = "src/main/resources/static/images/recipe";
+        String imageString = imageService.saveImageToStorage(uploadDirectory, file);
+        return new ResponseEntity<>(imageString, HttpStatus.OK);
+    }
+
+    @GetMapping("image/{imageName}")
+    public ResponseEntity<byte[]> get_image(@PathVariable String imageName) throws Exception {
+        String imageDirectory = "src/main/resources/static/images/recipe";
+
+        byte[] image = imageService.getImage(imageDirectory, imageName);
+        return new ResponseEntity<>(image, HttpStatus.OK);
     }
 
     @DeleteMapping("ingredient")

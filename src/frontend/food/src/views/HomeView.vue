@@ -36,6 +36,7 @@ export default {
   },
   methods: {
     async OwnRecipes() {
+      console.log(this.$store.state.userData.jwt);
       await backendService.getOwn(this.$store.state.userData.jwt).then((response) => {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {

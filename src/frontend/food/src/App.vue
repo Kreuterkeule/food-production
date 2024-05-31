@@ -1,6 +1,7 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link>
+    <router-link to="/createRecipe">Add Recipe</router-link>
     <router-link to="/about">About</router-link>
     <button v-if="this.$store.state.userData.loggedIn" class="split" @click.prevent="logout()">
       Logout
@@ -18,9 +19,9 @@
   </nav>
   <div style="height: 64px"></div>
   <div class="page-wrapper">
-
   <router-view/>
   </div>
+  <p>{{ userData }}</p>
   <footer>
     <p>&copy; Moritz Siefke 2024</p>
   </footer>

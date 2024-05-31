@@ -32,4 +32,9 @@ export default class backendService {
       },
     });
   }
+
+  static addRecipe(jwt, recipe) {
+    console.log(jwt, recipe);
+    return null;
+  }
 }

@@ -15,6 +15,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import backendService from '@/services/backendService';
 
 export default defineComponent({
   name: 'LoginView',
@@ -22,8 +23,22 @@ export default defineComponent({
   },
   methods: {
     login() {
-      this.$store.commit('login', { username: this.username, password: this.password });
-      this.$router.push('/');
+      backendService.getJwt(
+        this.username,
+        this.password,
+      ).then((response) => {
+        if (response.ok) {
+          response.clone().json().catch(() => response.text()).then((data) => {
+            this.$store.commit('login', { username: this.username, jwt: data });
+            console.log(data);
+            this.$router.push('/');
+          });
+        }
+        if (response.status === 401) {
+          // TODO: implement notification system
+          alert('Invalid username or password');
+        }
+      });
     },
 
   },

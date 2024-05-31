@@ -19,6 +19,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import backendService from '@/services/backendService';
 
 export default defineComponent({
   name: 'RegisterView',
@@ -44,8 +45,40 @@ export default defineComponent({
         alert('input validation failed');
         return;
       }
+      backendService.signUp(
+        this.username,
+        this.email,
+        this.password,
+      ).then((response) => {
+        if (response.ok) {
+          console.log(response);
+          console.log(response.data);
+          this.login();
+        }
+        if (response.status === 409) {
+          // TODO: implement notification system
+          alert('Username already exists');
+        }
+      });
       this.$store.commit('signUp', { username: this.username, email: this.email, password: this.password });
-      this.$router.push('/');
+    },
+    login() {
+      backendService.getJwt(
+        this.username,
+        this.password,
+      ).then((response) => {
+        if (response.ok) {
+          response.clone().json().catch(() => response.text()).then((data) => {
+            this.$store.commit('login', { username: this.username, jwt: data });
+            console.log(data);
+            this.$router.push('/');
+          });
+        }
+        if (response.status === 401) {
+          // TODO: implement notification system
+          alert('Invalid username or password');
+        }
+      });
     },
     validate() {
       return (this.username.length > 0 && this.email.length > 0 && this.password.length > 0 && /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\W)(?!.* ).{8,128}$/.test(this.password));

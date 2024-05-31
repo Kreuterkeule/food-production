@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
+import NotFound from '../views/NotFound.vue';
 
 const routes = [
   {
@@ -17,6 +18,12 @@ const routes = [
     name: 'register',
     component: () => import('../views/RegisterView.vue'),
   },
+  {
+    path: '/createRecipe',
+    name: 'createRecipe',
+    component: () => import('../views/AddRecipe.vue'),
+  },
+  { path: '/:catchAll(.*)', component: NotFound },
 ];
 
 const router = createRouter({
