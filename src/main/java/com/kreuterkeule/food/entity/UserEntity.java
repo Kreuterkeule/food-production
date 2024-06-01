@@ -1,5 +1,8 @@
 package com.kreuterkeule.food.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.kreuterkeule.food.serializer.UserSerializer;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -13,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "user_data")
+@JsonSerialize(using = UserSerializer.class)
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -21,7 +21,7 @@
   <div class="page-wrapper">
   <router-view/>
   </div>
-  <p>{{ userData }}</p>
+  <NotificationSystem></NotificationSystem>
   <footer>
     <p>&copy; Moritz Siefke 2024</p>
   </footer>
@@ -29,15 +29,21 @@
 
 <script>
 import { defineComponent } from 'vue';
+import NotificationSystem from './components/NotificationSystem.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
+    NotificationSystem,
   },
   methods: {
     logout() {
       console.log('logging out');
       this.$store.commit('logout');
+      this.$store.commit('addNotification', {
+        message: 'Logged out',
+        type: 'success',
+      });
     },
   },
 });
@@ -100,9 +106,14 @@ nav {
 
 }
 .page-wrapper {
-  padding: 20px 20vw 64px 20vw;
+  width: calc(100% - 40px);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 .site-container {
+  max-width: 1200px;
+  width: calc(100% - 40px);
   background-color: #f4f4f4;
   padding: 20px;
   padding-bottom: 100px;
@@ -112,11 +123,76 @@ footer {
   color: white;
   text-align: center;
   padding: 20px;
-  position: absolute;
+  position: fixed;
   width: calc(100% - 40px);
   bottom: 0;
 }
 .required {
   color: red;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    input ,textarea {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 0.25rem;
+      border: none;
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px green;
+      }
+    }
+  }
+  button {
+    margin: 8px 0;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: green;
+    color: white;
+    width: 100%;
+    cursor: pointer;
+    &:hover {
+      background-color: green;
+    }
+  }
+  .file-input {
+    display: none;
+    &-label {
+      display: block;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 0.25rem;
+      border: none;
+      background-color: green;
+      color: white;
+      cursor: pointer;
+      &:hover {
+        opacity: .8;
+      }
+    }
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    th, td {
+      border-right: 1px solid black;
+      padding: 0.5rem;
+      overflow-x: scroll;
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
 }
 </style>

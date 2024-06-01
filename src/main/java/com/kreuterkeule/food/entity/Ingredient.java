@@ -27,5 +27,8 @@ public class Ingredient {
     private String info;
     private Integer calories_per_gram;
 
-
+    @Override
+    public String toString() {
+        return id + "|" + name + "|" + calories_per_gram;
+    }
 }

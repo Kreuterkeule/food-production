@@ -26,10 +26,6 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
-    private boolean check() {
-        return userService.getRoles().contains("ROLE_ADMIN");
-    }
-
     @GetMapping("/")
     public ResponseEntity<String> root() {
         return new ResponseEntity<String>("200 OK", HttpStatus.OK);

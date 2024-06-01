@@ -17,7 +17,7 @@ public class ImageService {
         String uniqueFileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
 
         Path uploadPath = Path.of(uploadDirectory);
-        Path filePath = uploadPath.resolve(uniqueFileName)
+        Path filePath = uploadPath.resolve(uniqueFileName);
 
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);

@@ -56,8 +56,10 @@ export default defineComponent({
           this.login();
         }
         if (response.status === 409) {
-          // TODO: implement notification system
-          alert('Username already exists');
+          this.$store.commit('addNotification', {
+            message: 'Username already exists',
+            type: 'error',
+          });
         }
       });
       this.$store.commit('signUp', { username: this.username, email: this.email, password: this.password });
@@ -72,11 +74,17 @@ export default defineComponent({
             this.$store.commit('login', { username: this.username, jwt: data });
             console.log(data);
             this.$router.push('/');
+            this.$store.commit('addNotification', {
+              message: 'Singed up and logged in',
+              type: 'success',
+            });
           });
         }
         if (response.status === 401) {
-          // TODO: implement notification system
-          alert('Invalid username or password');
+          this.$store.commit('addNotification', {
+            message: 'error 401 Unauthorized after sign up\n this should not happen\n please contact the administrator',
+            type: 'error',
+          });
         }
       });
     },
@@ -90,38 +98,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 h1 {
   margin-bottom: 100px;
-}
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 300px;
-  margin: 0 auto;
-  label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    input {
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 0.25rem;
-      border: none;
-      &:focus {
-        box-shadow: 0 1px 1px 2px green;
-      }
-    }
-  }
-  button {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-    border: none;
-    background-color: green;
-    color: white;
-    cursor: pointer;
-    &:hover {
-      background-color: green;
-    }
-  }
 }
 </style>

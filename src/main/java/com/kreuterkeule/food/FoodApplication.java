@@ -20,7 +20,10 @@ public class FoodApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("*");
+				registry
+						.addMapping("/**")
+						.allowedMethods("PUT", "DELETE", "GET", "POST", "OPTIONS", "PATCH", "HEAD")
+						.allowedOrigins("*");
 			}
 		};
 	}

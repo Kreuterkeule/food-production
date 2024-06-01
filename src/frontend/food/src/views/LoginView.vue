@@ -30,13 +30,19 @@ export default defineComponent({
         if (response.ok) {
           response.clone().json().catch(() => response.text()).then((data) => {
             this.$store.commit('login', { username: this.username, jwt: data });
-            console.log(data);
-            this.$router.push('/');
+            this.$store.commit('addNotification', {
+              message: 'Logged in',
+              type: 'success',
+            });
+            this.$router.push(this.$route.query.from || '/');
           });
         }
         if (response.status === 401) {
           // TODO: implement notification system
-          alert('Invalid username or password');
+          this.$store.commit('addNotification', {
+            message: 'Invalid username or password',
+            type: 'error',
+          });
         }
       });
     },
@@ -48,38 +54,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 h1 {
   margin-bottom: 100px;
-}
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 300px;
-  margin: 0 auto;
-  label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    input {
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 0.25rem;
-      border: none;
-      &:focus {
-        box-shadow: 0 1px 1px 2px green;
-      }
-    }
-  }
-  button {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-    border: none;
-    background-color: green;
-    color: white;
-    cursor: pointer;
-    &:hover {
-      background-color: green;
-    }
-  }
 }
 </style>
