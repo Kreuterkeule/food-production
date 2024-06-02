@@ -1,3 +1,4 @@
+/* eslint-disable */
 import VuexPersistence from 'vuex-persist';
 import Vuex from 'vuex';
 

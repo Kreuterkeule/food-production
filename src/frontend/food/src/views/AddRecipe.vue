@@ -168,6 +168,7 @@ export default defineComponent({
         });
         return;
       }
+      if (this.ingredient_amount === undefined) this.ingredient_amount = [];
       if (this.ingredient_amount.find((i) => i.ingredient === this.ingredient)) {
         this.$store.commit('addNotification', {
           message: 'Ingredient already added',
@@ -218,6 +219,7 @@ export default defineComponent({
       if (!(this.tagSelected || clicked)) {
         return;
       }
+      if (this.tags === undefined) this.tags = [];
       this.tags.push(this.tag);
       this.tag = '';
       this.tags = [...new Set(this.tags)]; // remove duplicates
