@@ -25,6 +25,15 @@ export default class backendService {
     });
   }
 
+  static getSaved(jwt, page = null, pageSize = null) {
+    return fetch(`${constantService.baseUrl}/app/saved?${page ? `page=${page}` : ''}&${pageSize ? `page_size=${pageSize}` : ''}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+  }
+
   static getOwn(jwt) {
     return fetch(`${constantService.baseUrl}/app/own`, {
       method: 'GET',
@@ -54,6 +63,12 @@ export default class backendService {
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify(names),
+    });
+  }
+
+  static getRecipe(id) {
+    return fetch(`${constantService.baseUrl}/app/recipe/${id}`, {
+      method: 'GET',
     });
   }
 
@@ -110,6 +125,77 @@ export default class backendService {
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify(recipe),
+    });
+  }
+
+  static deleteRecipe(jwt, id) {
+    return fetch(`${constantService.baseUrl}/app/recipe/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+  }
+
+  static saveToUser(jwt, id) {
+    return fetch(`${constantService.baseUrl}/app/save/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+  }
+
+  static unsaveFromUser(jwt, id) {
+    return fetch(`${constantService.baseUrl}/app/unsave/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+  }
+
+  static getRecipesByTags(names, page = null, pageSize = null) {
+    return fetch(`${constantService.baseUrl}/app/recipe/tags`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ names, page, page_size: pageSize }),
+    });
+  }
+
+  static getRecipesByIngredients(names, page = null, pageSize = null) {
+    return fetch(`${constantService.baseUrl}/app/recipe/ingredients`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ names, page, page_size: pageSize }),
+    });
+  }
+
+  static getAllRecipes(page = null, pageSize = null) {
+    return fetch(`${constantService.baseUrl}/app/recipe?${page ? `page=${page}` : ''}&${pageSize ? `page_size=${pageSize}` : ''}`, {
+      method: 'GET',
+    });
+  }
+
+  static getRecipesByUser(user, page = null, pageSize = null) {
+    return fetch(`${constantService.baseUrl}/app/recipe/user?username=${user}&${page ? `page=${page}` : ''}&${pageSize ? `page_size=${pageSize}` : ''}`, {
+      method: 'GET',
+    });
+  }
+
+  static getUsers(string, page = null, pageSize = null) {
+    return fetch(`${constantService.baseUrl}/app/user/string?string=${string}&${page ? `page=${page}` : ''}&${pageSize ? `page_size=${pageSize}` : ''}`, {
+      method: 'GET',
+    });
+  }
+
+  static searchRecipes(string, page = null, pageSize = null) {
+    return fetch(`${constantService.baseUrl}/app/recipe/search?string=${string}&${page ? `page=${page}` : ''}&${pageSize ? `page_size=${pageSize}` : ''}`, {
+      method: 'GET',
     });
   }
 }

@@ -59,10 +59,18 @@ public class SecurityConfig {
                                             "/app/daily"
                                     ).permitAll()
                                     .requestMatchers(
-                                            antMatcher(HttpMethod.DELETE, "/app/recipe"),
                                             antMatcher(HttpMethod.GET, "/app/tag"),
-                                            antMatcher(HttpMethod.GET, "/app/ingredient")
+                                            antMatcher(HttpMethod.GET, "/app/ingredient"),
+                                            antMatcher(HttpMethod.GET, "/app/image/**"),
+                                            antMatcher(HttpMethod.GET, "/app/recipe/**"),
+                                            antMatcher(HttpMethod.POST, "/app/recipe/**"),
+                                            antMatcher(HttpMethod.GET, "/app/user"),
+                                            antMatcher(HttpMethod.OPTIONS, "/**"),
+                                            antMatcher(HttpMethod.GET, "/app/user/**")
                                     ).permitAll()
+                                    .requestMatchers(
+                                        antMatcher(HttpMethod.DELETE, "/app/recipe/**")
+                                    ).authenticated()
                                     .requestMatchers(
                                             "/v2/api-docs",
                                             "/v3/api-docs",

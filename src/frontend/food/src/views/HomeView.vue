@@ -4,9 +4,13 @@
     <p>Welcome to the Home page</p>
     <br>
     <h2>New Recipes</h2>
-    <div class="recipe-bar daily-recipes">
-      <router-link v-for="recipe in this.daily_recipes" :key="recipe.id"
-      :to="'/recipe/' + recipe.id" class="recipe-card">
+    <!-- v-if for so that the v-for loop runs after the data arrived :> -->
+    <div v-if="this.daily_recipes.length > 0" class="recipe-bar daily-recipes">
+      <router-link
+        v-for="recipe in this.daily_recipes" :key="recipe.id"
+        :class="(recipe.user.username === this.$store.state.userData.username) ? 'own-recipe' :
+          checkSaved(recipe) ? 'saved-recipe' : ''"
+      :to="'/recipe/' + recipe.id + '/'" class="recipe-card">
         <!-- <img :src="recipe.image" alt=""> -->
         <img :src="recipe.imageUrl" alt="">
         <h2>{{ recipe.name }}</h2>
@@ -14,11 +18,29 @@
           By {{ recipe.user.username }} ({{ recipe.user.own_recipes }})</router-link>
       </router-link>
     </div>
-    <div></div>
+    <h2 v-if="this.$store.state.userData.loggedIn">Your Saved Recipes</h2>
+    <!-- v-if for so that the v-for loop runs after the data arrived :> -->
+    <div v-if="this.$store.state.userData.loggedIn && this.saved_recipes.length > 0"
+      class="recipe-bar own-recipes">
+      <router-link v-for="recipe in this.saved_recipes" :key="recipe.id"
+      :class="(recipe.user.username === this.$store.state.userData.username) ? 'own-recipe' :
+          checkSaved(recipe) ? 'saved-recipe' : ''"
+      :to="'/recipe/' + recipe.id + '/'" class="recipe-card">
+        <!-- <img :src="recipe.image" alt=""> -->
+        <img :src="recipe.imageUrl" alt="">
+        <h2>{{ recipe.name }}</h2>
+        <router-link :to="`/user/${recipe.user.username}`">
+          By {{ recipe.user.username }} ({{ recipe.user.own_recipes }})</router-link>
+      </router-link>
+    </div>
     <h2 v-if="this.$store.state.userData.loggedIn">Your own Recipes</h2>
-    <div v-if="this.$store.state.userData.loggedIn" class="recipe-bar own-recipes">
+    <!-- v-if for so that the v-for loop runs after the data arrived :> -->
+    <div v-if="this.$store.state.userData.loggedIn && this.own_recipes.length > 0"
+      class="recipe-bar own-recipes">
       <router-link v-for="recipe in this.own_recipes" :key="recipe.id"
-      :to="'/recipe/' + recipe.id" class="recipe-card">
+      :class="(recipe.user.username === this.$store.state.userData.username) ? 'own-recipe' :
+          checkSaved(recipe) ? 'saved-recipe' : ''"
+      :to="'/recipe/' + recipe.id + '/'" class="recipe-card">
         <!-- <img :src="recipe.image" alt=""> -->
         <img :src="recipe.imageUrl" alt="">
         <h2>{{ recipe.name }}</h2>
@@ -36,74 +58,54 @@ export default {
   data() {
     return {
       own_recipes: [],
-      daile_recipes: [],
+      daily_recipes: [],
+      saved_recipes: [],
     };
   },
   mounted() {
     this.OwnRecipes();
     this.DailyRecipes();
+    this.SavedRecipes();
   },
   name: 'HomeView',
   components: {
   },
   methods: {
-    async OwnRecipes() {
-      console.log(this.$store.state.userData.jwt);
-      await backendService.getOwn(this.$store.state.userData.jwt).then((response) => {
+    SavedRecipes() {
+      backendService.getSaved(this.$store.state.userData.jwt).then((response) => {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {
-          this.own_recipes = d;
+          this.saved_recipes = d;
+          console.log(d);
         });
       });
     },
-    async DailyRecipes() {
-      await backendService.getDaily().then((response) => {
+    OwnRecipes() {
+      console.log(this.$store.state.userData.jwt);
+      backendService.getOwn(this.$store.state.userData.jwt).then((response) => {
+        const data = response.clone().json().catch(() => response.text());
+        data.then((d) => {
+          this.own_recipes = d;
+          console.log(d);
+        });
+      });
+    },
+    DailyRecipes() {
+      backendService.getDaily().then((response) => {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {
           this.daily_recipes = d;
+          console.log(d);
         });
       });
+    },
+    checkSaved(recipe) {
+      if (this.$store.state.userData.loggedIn) {
+        return recipe.usersSaved.map((e) => e.username)
+          .includes(this.$store.state.userData.username);
+      }
+      return false;
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.recipe-bar {
-  padding: 10px;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: nowrap;
-  overflow-x: scroll;
-  justify-content: left;
-  font-size: 12px;
-  height: 300px;;
-  a.recipe-card {
-    padding: 10px;
-    &:hover {
-      background-color: #aaaaaa;
-    }
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    justify-content: center;
-    color: black;
-    text-decoration: none;
-    img {
-      width: 200px;
-      height: 200px;
-      object-fit: cover;
-      object-fit: cover;
-    }
-    h2 {
-      text-align: center
-    }
-  }
-  a {
-    color: black;
-    &:hover {
-      text-decoration: none;
-    }
-  }
-}
-</style>

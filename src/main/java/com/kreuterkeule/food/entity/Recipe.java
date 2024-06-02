@@ -53,6 +53,7 @@ public class Recipe {
     private Timestamp updatedDate;
     @LastModifiedDate
     private Date modified_date;
+    @Column(columnDefinition = "text")
     private String text;
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
@@ -65,6 +66,8 @@ public class Recipe {
     )
     private List<Tag> tags;
     private String imageUrl;
+    @ManyToMany(mappedBy = "saved_recipes")
+    private List<UserEntity> usersSaved;
 
     @Override
     public String toString() {

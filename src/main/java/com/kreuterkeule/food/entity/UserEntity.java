@@ -41,4 +41,12 @@ public class UserEntity {
     public UserEntity() {
 
     }
+
+    public void addSavedRecipe(Recipe recipe) {
+        this.saved_recipes.add(recipe);
+    }
+
+    public void removeRecipe(Recipe el) {
+        this.saved_recipes.remove(el);
+    }
 }

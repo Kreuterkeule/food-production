@@ -18,6 +18,10 @@ const store = new Vuex.Store({
       jwt: '',
     },
     addRecipeState: {},
+    pageSize: 10,
+    searchString: '',
+    userSearchString: '',
+    userPageSize: 10,
   },
   getters: {
   },
@@ -63,6 +67,18 @@ const store = new Vuex.Store({
     },
     persistAddRecipeState(state, payload) {
       state.addRecipeState = payload;
+    },
+    persistPageSize(state, payload) {
+      this.state.pageSize = payload;
+    },
+    persistSearchString(state, payload) {
+      this.state.searchString = payload;
+    },
+    persistUserPageSize(state, payload) {
+      this.state.userPageSize = payload;
+    },
+    persistUserSearchString(state, payload) {
+      this.state.userSearchString = payload;
     },
   },
   actions: {

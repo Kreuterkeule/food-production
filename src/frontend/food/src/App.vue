@@ -1,15 +1,18 @@
 <template>
-  <nav>
+  <nav ref="nav">
     <router-link to="/">Home</router-link>
     <router-link to="/createRecipe">Add Recipe</router-link>
-    <router-link to="/about">About</router-link>
+    <router-link to="/all">All Recipes</router-link>
+    <router-link to="/users">Users</router-link>
+    <router-link to="/search">Search</router-link>
     <button v-if="this.$store.state.userData.loggedIn" class="split" @click.prevent="logout()">
       Logout
     </button>
-    <div class="no-hover split" v-if="this.$store.state.userData.loggedIn">
+    <router-link :to="`/user/${this.$store.state.userData.username}`"
+    class="no-hover split profile-button" v-if="this.$store.state.userData.loggedIn">
       <div class="icon-spacer"></div>
       <img class="profile-icon" src="@/assets/profile-user.png" alt="">
-      {{ this.$store.state.userData.username}}</div>
+      {{ this.$store.state.userData.username}}</router-link>
     <router-link v-if="!this.$store.state.userData.loggedIn" class="split" to="/register">
       Sign Up
     </router-link>
@@ -17,7 +20,7 @@
       Login
     </router-link>
   </nav>
-  <div style="height: 64px"></div>
+  <div :style="{height: PageWrapperHeight}"></div>
   <div class="page-wrapper">
   <router-view/>
   </div>
@@ -33,10 +36,20 @@ import NotificationSystem from './components/NotificationSystem.vue';
 
 export default defineComponent({
   name: 'App',
+  data() {
+    return {
+      PageWrapperHeight: '64px',
+    };
+  },
   components: {
     NotificationSystem,
   },
   methods: {
+    computePageWrapperPadding() {
+      console.log('computing height');
+      console.log('nav height', this.$refs.nav.offsetHeight + 20);
+      this.PageWrapperHeight = this.$refs.nav ? `${this.$refs.nav.offsetHeight}px !important` : '64px';
+    },
     logout() {
       console.log('logging out');
       this.$store.commit('logout');
@@ -45,6 +58,13 @@ export default defineComponent({
         type: 'success',
       });
     },
+  },
+  mounted() {
+    this.computePageWrapperPadding();
+    window.addEventListener('resize', this.computePageWrapperPadding);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.computePageWrapperPadding);
   },
 });
 
@@ -100,8 +120,14 @@ nav {
     background-color: #ddd;
     color: black;
   }
-  div.no-hover {
-    background-color: #555;
+  a.no-hover {
+    background-color: #555 !important;
+    &:hover {
+      background-color: #ddd !important;
+      img {
+        filter: invert(0);
+      }
+    }
   }
 
 }
@@ -195,4 +221,92 @@ form {
     }
   }
 }
+
+.recipe-bar {
+  padding: 10px;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  justify-content: left;
+  font-size: 12px;
+  height: 300px;;
+  a.recipe-card {
+    width: 200px;
+    &.own-recipe {
+      background-color: #fdefae;
+    }
+    &.saved-recipe {
+      background-color: #aefdef;
+    }
+    padding: 10px;
+    &:hover {
+      background-color: #aaaaaa;
+    }
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+    color: black;
+    text-decoration: none;
+    img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      object-fit: cover;
+    }
+    h2 {
+      text-align: center;
+      margin: 0;
+      overflow: hidden;
+      height: 50px;
+    }
+  }
+  a {
+    color: black;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+h2 {
+  margin-top: 24px;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+  flex-wrap: wrap;
+  gap: 10px;
+  div {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  & div, & {
+    button {
+      margin: 0 2px;
+      color: white;
+      background-color: green;
+      border: none;
+      padding: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      width: fit-content;
+      min-width: auto;
+    }
+    input {
+      margin: 0 10px;
+      min-width: auto;
+      padding: 5px 10px;
+      border: 1px solid green;
+      border-radius: 5px;
+    }
+  }
+}
+
 </style>

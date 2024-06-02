@@ -9,6 +9,7 @@ import java.util.Map;
 @Data
 public class CreateRecipeDto {
 
+    public Long id;
     public String name;
     public String text;
     public Integer time;
