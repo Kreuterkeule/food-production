@@ -69,6 +69,9 @@ const store = new Vuex.Store({
     persistAddRecipeState(state, payload) {
       state.addRecipeState = payload;
     },
+    clearAddRecipeState(state) {
+      state.addRecipeState = {}
+    },
     persistPageSize(state, payload) {
       this.state.pageSize = payload;
     },

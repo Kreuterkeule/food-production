@@ -9,6 +9,7 @@
                 <input v-model="password" type="password" id="password" name="password" required>
             </label>
             <button type="submit" @click.prevent="this.login()">Login</button>
+            <button type="submit" @click.prevent="this.signUp()">Sign Up</button>
         </form>
     </div>
 </template>
@@ -22,6 +23,38 @@ export default defineComponent({
   components: {
   },
   methods: {
+    signUp() {
+      if (!this.validate()) {
+        console.log(this.username, this.email, this.password);
+        console.log(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.password));
+        this.$store.commit('addNotification', {
+          message: 'password must contain at least one letter, at least one number, and be longer than 8 characters and shorter than 128',
+          type: 'error',
+        });
+        return;
+      }
+      backendService.signUp(
+        this.username,
+        '',
+        this.password,
+      ).then((response) => {
+        if (response.ok) {
+          console.log(response);
+          console.log(response.data);
+          this.login();
+        }
+        if (response.status === 409) {
+          this.$store.commit('addNotification', {
+            message: 'Username already exists',
+            type: 'error',
+          });
+        }
+      });
+      this.$store.commit('signUp', { username: this.username, email: '', password: this.password });
+    },
+    validate() {
+      return (this.username.length > 0 && this.password.length > 0 && /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\W)(?!.* ).{8,128}$/.test(this.password));
+    },
     login() {
       backendService.getJwt(
         this.username,

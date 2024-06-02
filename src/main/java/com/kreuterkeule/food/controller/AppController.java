@@ -72,6 +72,8 @@ public class AppController {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         List<Recipe> all = user.getSaved_recipes();
+        System.out.println(user);
+        System.out.println(all);
         return new ResponseEntity<>(listService.getPage(all, page, page_size), HttpStatus.OK);
     }
 

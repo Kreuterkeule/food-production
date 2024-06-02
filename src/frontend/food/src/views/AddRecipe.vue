@@ -187,6 +187,7 @@ export default defineComponent({
     selectTag(tag) {
       console.log('selecting tag');
       console.log(tag);
+      if (this.tags === undefined) this.tags = [];
       this.tags.push(tag.name);
       this.tag = '';
       this.tags = [...new Set(this.tags)]; // remove duplicates
@@ -258,6 +259,7 @@ export default defineComponent({
       this.image = null;
       this.image_raw = null;
       this.tags = [];
+      this.$store.commit('clearAddRecipeState');
     },
     stagePutRecipe(recipe, recall = false) {
       if (this.$route.params.id && !recall) {
@@ -314,7 +316,7 @@ export default defineComponent({
         .then((imageResponse) => {
           if (imageResponse.status !== 201) {
             this.$store.commit('addNotification', {
-              message: 'Please choose an image',
+              message: 'Please choose an image, if you have done so you might have exceedet the maximum upload size',
               type: 'error',
             });
             return;

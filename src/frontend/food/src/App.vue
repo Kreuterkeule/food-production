@@ -12,7 +12,9 @@
     class="no-hover split profile-button" v-if="this.$store.state.userData.loggedIn">
       <div class="icon-spacer"></div>
       <img class="profile-icon" src="@/assets/profile-user.png" alt="">
-      {{ this.$store.state.userData.username}}</router-link>
+      {{ this.$store.state.userData.username}}
+    </router-link>
+    <router-link v-if="this.$store.state.userData.loggedIn" to="/saved">Saved Recipes</router-link>
     <router-link v-if="!this.$store.state.userData.loggedIn" class="split" to="/register">
       Sign Up
     </router-link>
@@ -149,7 +151,6 @@ footer {
   color: white;
   text-align: center;
   padding: 20px;
-  position: fixed;
   width: calc(100% - 40px);
   bottom: 0;
 }

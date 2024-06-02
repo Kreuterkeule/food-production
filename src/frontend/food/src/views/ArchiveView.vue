@@ -63,6 +63,7 @@ export default defineComponent({
       return false;
     },
     capitalize(string) {
+      if (string === undefined) return '';
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     resizeInput(input) {
@@ -75,9 +76,20 @@ export default defineComponent({
         this.getWithIngredients();
       } else if (this.$route.name === 'user') {
         this.getWithUser();
+      } else if (this.$route.name === 'saved') {
+        this.getSaved();
       } else {
         this.getAll();
       }
+    },
+    getSaved() {
+      backendService.getSaved(this.$store.state.userData.jwt, this.page, this.pageSize)
+        .then((response) => {
+          const data = response.clone().json().catch(() => response.text());
+          data.then((d) => {
+            this.recipes = d;
+          });
+        });
     },
     getWithUser() {
       backendService.getRecipesByUser(this.$route.params.name, this.page, this.pageSize)

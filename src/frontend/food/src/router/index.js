@@ -59,6 +59,11 @@ const routes = [
     component: () => import('../views/ArchiveView.vue'),
   },
   {
+    path: '/saved',
+    name: 'saved',
+    component: () => import('../views/ArchiveView.vue'),
+  },
+  {
     path: '/users',
     name: 'users',
     component: () => import('../views/UsersView.vue'),
