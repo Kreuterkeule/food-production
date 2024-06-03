@@ -77,20 +77,20 @@ export default defineComponent({
 // TODO: for legal use replace this with a font that you have downloaded
 /* roboto-regular - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: url('@/fonts/roboto-v30-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('@/fonts/roboto-v30-latin-regular.woff2') format('woff2');
 }
 
 /* roboto-italic - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: 'Roboto';
   font-style: italic;
   font-weight: 400;
-  src: url('@/fonts/roboto-v30-latin-italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('@/fonts/roboto-v30-latin-italic.woff2') format('woff2');
 }
 
 * {
