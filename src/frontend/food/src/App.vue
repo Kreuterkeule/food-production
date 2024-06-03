@@ -75,7 +75,23 @@ export default defineComponent({
 <style lang="scss">
 
 // TODO: for legal use replace this with a font that you have downloaded
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+/* roboto-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url('@/fonts/roboto-v30-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* roboto-italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 400;
+  src: url('@/fonts/roboto-v30-latin-italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
 
 * {
   font-family: 'Roboto', sans-serif;
@@ -134,6 +150,7 @@ nav {
 
 }
 .page-wrapper {
+  min-height: 100vh;
   width: calc(100% - 40px);
   padding: 20px;
   display: flex;
