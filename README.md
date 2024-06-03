@@ -6,6 +6,39 @@ npm
 node
 openjdk 17
 
+postgresql database connection with emtpy database
+
+### Required Configuration
+./application.properties Database configuration
+
+```properties
+# application.properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/food_production
+spring.datasource.username=postgres
+spring.datasource.password=123
+```
+Change Driver, if you use a different Database (f.e. MariaDB)
+```properties
+# application.properties
+spring.datasource.driver-class-name=org.postgresql.Driver
+```
+you will need to include the driver dependency in pom.xml
+
+```xml
+<!-- pom.xml -->
+<project>
+    <!-- ... -->
+    <dependencies>
+        <!-- ... -->
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+        </dependency>
+    </dependencies>
+    <!-- ... -->
+</project>
+```
+
 # Installation
 
 ## Linux and Mac
