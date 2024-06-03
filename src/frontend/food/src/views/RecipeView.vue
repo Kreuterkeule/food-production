@@ -1,7 +1,12 @@
 <template>
     <div class="site-container">
         <div class="recipe-container">
-          <h1>{{ recipe.name }}</h1>
+          <h1>{{ recipe.name }}
+          </h1>
+          <router-link class="user-link"
+          :to="`/user/${recipe.user !== undefined ? recipe.user.username : ''}`">
+            By {{ recipe.user !== undefined ?
+            `${recipe.user.username} (${recipe.user.own_recipes})` :'' }}</router-link>
           <img :src="recipe.imageUrl" alt="">
           <h2>Ingredients</h2>
           <table v-if="this.recipe !== 0">
@@ -11,7 +16,7 @@
               <td>{{ ia.amount }}</td>
             </tr>
           </table>
-          <h2>Insturctions</h2>
+          <h2>Instructions</h2>
           <div class="instructions">
             <p><span v-html="prepareText(recipe.text)"></span></p>
           </div>
@@ -228,9 +233,6 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   max-width: 600px;
-  h1 {
-    margin-bottom:  64px;
-  }
   h2 {
     margin: 16px;
   }
@@ -270,6 +272,9 @@ export default defineComponent({
 }
 .instructions {
   width: 100%;
+  * {
+    width: 100%;
+  }
   p {
     padding: 16px;
     background-color: #fff;
@@ -328,6 +333,17 @@ export default defineComponent({
       opacity: .8;
       text-decoration: underline;
     }
+  }
+}
+
+.user-link {
+  font-size: large;
+  margin-bottom:  64px;
+  color: black;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    opacity: .8;
   }
 }
 </style>

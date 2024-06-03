@@ -49,8 +49,10 @@ export default defineComponent({
         this.password,
       ).then((response) => {
         if (response.ok) {
-          console.log(response);
-          console.log(response.data);
+          this.$store.commit('addNotification', {
+            message: 'Signed up sucess',
+            type: 'success',
+          });
           this.login();
         }
         if (response.status === 409) {
@@ -60,7 +62,6 @@ export default defineComponent({
           });
         }
       });
-      this.$store.commit('signUp', { username: this.username, email: this.email, password: this.password });
     },
     login() {
       backendService.getJwt(

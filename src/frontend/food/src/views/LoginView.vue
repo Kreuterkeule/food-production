@@ -39,8 +39,10 @@ export default defineComponent({
         this.password,
       ).then((response) => {
         if (response.ok) {
-          console.log(response);
-          console.log(response.data);
+          this.$store.commit('addNotification', {
+            message: 'Sign up success',
+            type: 'success',
+          });
           this.login();
         }
         if (response.status === 409) {
@@ -50,7 +52,6 @@ export default defineComponent({
           });
         }
       });
-      this.$store.commit('signUp', { username: this.username, email: '', password: this.password });
     },
     validate() {
       return (this.username.length > 0 && this.password.length > 0 && /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\W)(?!.* ).{8,128}$/.test(this.password));

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,7 +27,7 @@ public class UserEntity {
     private String username; // same as users username
     private String info;
     @OneToMany(mappedBy="user")
-    private List<Recipe> own_recipes;
+    private List<Recipe> own_recipes = new ArrayList<>();
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_saved_recipes",

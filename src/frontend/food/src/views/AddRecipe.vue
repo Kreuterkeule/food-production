@@ -252,6 +252,9 @@ export default defineComponent({
       return this.name.length > 0
                 && this.text.length > 0;
     },
+    checkXSS() {
+      return !this.text.toLowerCase().includes('</script');
+    }, // TODO complete; Also note that this check should be done in api
     stageClearState() {
       this.name = '';
       this.text = '';
@@ -389,13 +392,21 @@ export default defineComponent({
     },
     addRecipe() {
       if (!this.validate()) {
-        // TODO implement notification system
         this.$store.commit('addNotification', {
           message: 'Name and Instructions can\'t be empty',
           type: 'error',
         });
         return;
       }
+      if (!this.checkXSS()) {
+        this.$store.commit('addNotification', {
+          message: 'Cross Site scripting not allowes :(',
+          type: 'warning',
+        });
+        return;
+      }
+      if (this.ingredient_amount === undefined) this.ingredient_amount = [];
+      if (this.tags === undefined) this.tags = [];
       this.stagePutTags();
     },
     getIngredients() {
