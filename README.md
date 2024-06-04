@@ -9,7 +9,17 @@ openjdk 17
 postgresql database connection with emtpy database
 
 ### Required Configuration
-./application.properties Database configuration
+
+When Deploying on server change api url in ./src/frontend/food/src/services/backendService.js
+
+```js
+// backendService.js
+export default class constantService {
+    static baseUrl = 'http://localhost:6969';
+}
+```
+
+./src/main/resources/application.properties Database configuration
 
 ```properties
 # application.properties
