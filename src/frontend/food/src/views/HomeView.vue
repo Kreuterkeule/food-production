@@ -81,17 +81,14 @@ export default {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {
           this.saved_recipes = d;
-          console.log(d);
         });
       });
     },
     OwnRecipes() {
-      console.log(this.$store.state.userData.jwt);
       backendService.getOwn(this.$store.state.userData.jwt).then((response) => {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {
           this.own_recipes = d;
-          console.log(d);
         });
       });
     },
@@ -100,7 +97,6 @@ export default {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {
           this.daily_recipes = d;
-          console.log(d);
         });
       });
     },
