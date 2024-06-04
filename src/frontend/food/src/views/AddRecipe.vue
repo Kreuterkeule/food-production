@@ -130,7 +130,6 @@ export default defineComponent({
       backendService.getRecipe(this.$route.params.id).then((response) => {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {
-          console.log(d);
           this.name = d.name;
           this.text = d.text;
           this.ingredient_amount = this.deserializeIngredientAmount(d.ingredients);
@@ -160,12 +159,9 @@ export default defineComponent({
       }
     },
     addIngredient(clicked = false) {
-      console.log('adding ingredient');
       if (!(this.ingredientSelected || this.amountSelected || clicked)) { // for enter keyup
         return;
       }
-      console.log('amount', this.amount === '');
-      console.log('ingredient', this.ingredient === '');
       if (this.ingredient === '' || this.amount === '') {
         this.$store.commit('addNotification', {
           message: 'Ingredient and amount can\'t be empty',
@@ -190,8 +186,6 @@ export default defineComponent({
       this.$refs.ingredientInput.focus();
     },
     selectTag(tag) {
-      console.log('selecting tag');
-      console.log(tag);
       if (this.tags === undefined) this.tags = [];
       this.tags.push(tag.name);
       this.tag = '';
@@ -246,7 +240,6 @@ export default defineComponent({
       }
       textNode.nodeValue = file.name;
       this.image_raw = file;
-      console.log(this.image_raw instanceof Blob);
       const reader = new FileReader();
       reader.onload = (e) => {
         this.image = e.target.result;
@@ -273,7 +266,6 @@ export default defineComponent({
     },
     stagePutRecipe(recipe, recall = false) {
       if (this.$route.params.id && !recall) {
-        console.log(recipe);
         const updateRecipe = recipe;
         updateRecipe.id = this.$route.params.id;
         this.stagePutRecipe(updateRecipe, true);
@@ -318,7 +310,6 @@ export default defineComponent({
           recipe.ingredient_amount[this.allIngredients
             .find((e) => e.name === i.ingredient).id] = i.amount;
         });
-        console.log(recipe);
         this.stagePutRecipe(recipe);
         return;
       }
@@ -340,7 +331,6 @@ export default defineComponent({
               ingredient_amount: {},
               imageUrl,
             };
-            console.log(this.ingredient_amount);
             this.ingredient_amount.forEach((i) => {
               recipe.ingredient_amount[this.allIngredients
                 .find((e) => e.name === i.ingredient).id] = i.amount;
@@ -464,14 +454,12 @@ export default defineComponent({
       this.getRecipe();
       return;
     }
-    console.log('loading state');
     this.name = this.$store.state.addRecipeState.name;
     this.text = this.$store.state.addRecipeState.text;
     this.ingredient_amount = this.$store.state.addRecipeState.ingredient_amount;
     this.image = this.$store.state.addRecipeState.image;
     this.image_raw = new Blob([this.$store.state.addRecipeState.image_raw], { type: 'image/png' });
     this.tags = this.$store.state.addRecipeState.tags;
-    console.log(this.image_raw instanceof Blob);
   },
   beforeUnmount() {
     if (this.$route.params.id) {
@@ -481,7 +469,6 @@ export default defineComponent({
       && this.image === null && this.tags.length === 0) {
       return;
     }
-    console.log('persisting state');
     if (this.image_raw === null) {
       this.$store.commit('persistAddRecipeState', {
         name: this.name,

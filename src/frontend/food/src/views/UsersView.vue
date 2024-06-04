@@ -62,12 +62,10 @@ export default defineComponent({
       this.$refs[input].style.width = `${this.$refs[input].value.length}ch`;
     },
     getUsers() {
-      console.log(this.searchString, this.page, this.pageSize);
       backendService.getUsers(this.searchString, this.page, this.pageSize).then((response) => {
         const data = response.clone().json().catch(() => response.text());
         data.then((d) => {
           this.users = d;
-          console.log(d);
         });
       });
     },

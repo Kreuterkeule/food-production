@@ -12,6 +12,10 @@
             <label for="password">Password
                 <input v-model="password" type="password" id="password" name="password" required>
             </label>
+            <label for="password_repeat">Repeat Password
+              <input v-model="passwordRepeat" type="password"
+              id="password_repeat" name="password_repeat" required>
+            </label>
             <button type="submit"
             @click.prevent="signUp()">Sign Up</button>
         </form>
@@ -29,15 +33,21 @@ export default defineComponent({
       username: '',
       email: '',
       password: '',
+      passwordRepeat: '',
     };
   },
   components: {
   },
   methods: {
     signUp() {
+      if (!this.passwordRepeat === this.password) {
+        this.$store.commit('addNotification', {
+          message: 'passwords do not match',
+          type: 'error',
+        });
+        return;
+      }
       if (!this.validate()) {
-        console.log(this.username, this.email, this.password);
-        console.log(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.password));
         this.$store.commit('addNotification', {
           message: 'password must contain at least one letter, at least one number, at least one special character f.e [!,@,#,$] and be longer than 8 characters and shorter than 128',
           type: 'error',
@@ -72,7 +82,6 @@ export default defineComponent({
         if (response.ok) {
           response.clone().json().catch(() => response.text()).then((data) => {
             this.$store.commit('login', { username: this.username, jwt: data });
-            console.log(data);
             this.$router.push('/');
             this.$store.commit('addNotification', {
               message: 'Singed up and logged in',

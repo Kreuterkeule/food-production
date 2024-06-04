@@ -86,11 +86,9 @@ export default defineComponent({
       this.$refs[input].style.width = `${this.$refs[input].value.length}ch`;
     },
     search() {
-      console.log(`searching for ${this.searchString}`);
     },
   },
   beforeUnmount() {
-    console.log(`persisting search string: ${this.searchString}`);
     this.$store.commit('persistSearchString', this.searchString);
     this.$store.commit('persistPageSize', this.pageSize);
   },

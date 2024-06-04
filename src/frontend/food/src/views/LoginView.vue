@@ -27,8 +27,6 @@ export default defineComponent({
   methods: {
     signUp() {
       if (!this.validate()) {
-        console.log(this.username, this.email, this.password);
-        console.log(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.password));
         this.$store.commit('addNotification', {
           message: 'password must contain at least one letter, at least one number, at least one special character f.e [!,@,#,$] and be longer than 8 characters and shorter than 128',
           type: 'error',
