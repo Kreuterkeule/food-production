@@ -249,6 +249,8 @@ export default defineComponent({
       reader.readAsDataURL(file);
     },
     validate() {
+      if (this.name === undefined) this.name = '';
+      if (this.text === undefined) this.text = '';
       return this.name.length > 0
                 && this.text.length > 0;
     },
