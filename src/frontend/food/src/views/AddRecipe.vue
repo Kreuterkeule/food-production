@@ -31,14 +31,13 @@
             ref="amountInput"
             v-model="amount" type="text" id="amount" name="amount">
           </label>
-          <button @touchend="addIngredient(true)"
-          @click.prevent="addIngredient(true)">Add Ingredient</button>
+          <button @click.prevent="addIngredient(true)">Add Ingredient</button>
         </div>
         <table>
           <tr v-for="ingredient in ingredient_amount" :key="ingredient.ingredient">
             <td>{{ ingredient.ingredient }}</td>
             <td>{{ ingredient.amount }}</td>
-            <td><button @touchend="removeIngredient(ingredient)"
+            <td><button
               @click.prevent="removeIngredient(ingredient)">x</button></td>
           </tr>
         </table>
@@ -77,12 +76,12 @@
           </ul>
         </div>
           <div class="tags">
-            <button @touchend="removeTag(tag)"
+            <button
             @click.prevent="removeTag(tag)" class="tag" v-for="tag in tags" :key="tag">
               {{ tag }} ({{ getTagUsage(tag) }})
             </button>
           </div>
-          <button @touchend="addRecipe()"
+          <button
           @click.prevent="addRecipe()">
             {{ (this.$route.params.id) ? 'Update Recipe' : 'Add Recipe' }}
           </button>
@@ -124,6 +123,9 @@ export default defineComponent({
   components: {
   },
   methods: {
+    makeUrl(url) {
+      return `${constantService.baseUrl}/app/image/${url}`;
+    },
     getRecipe() {
       backendService.getRecipe(this.$route.params.id).then((response) => {
         const data = response.clone().json().catch(() => response.text());
@@ -132,7 +134,7 @@ export default defineComponent({
           this.name = d.name;
           this.text = d.text;
           this.ingredient_amount = this.deserializeIngredientAmount(d.ingredients);
-          this.image = d.imageUrl;
+          this.image = this.makeUrl(d.image);
           this.time = d.time;
           this.tags = this.deserializeTags(d.tags);
         });
@@ -336,7 +338,7 @@ export default defineComponent({
               time: this.time,
               tag_ids: tags.map((t) => t.id),
               ingredient_amount: {},
-              imageUrl: `${constantService.baseUrl}/app/image/${imageUrl}`,
+              imageUrl,
             };
             console.log(this.ingredient_amount);
             this.ingredient_amount.forEach((i) => {

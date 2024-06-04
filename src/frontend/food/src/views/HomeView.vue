@@ -12,7 +12,7 @@
           checkSaved(recipe) ? 'saved-recipe' : ''"
       :to="'/recipe/' + recipe.id + '/'" class="recipe-card">
         <!-- <img :src="recipe.image" alt=""> -->
-        <img :src="recipe.imageUrl" alt="">
+        <img :src="makeUrl(recipe.imageUrl)" alt="">
         <h2>{{ recipe.name }}</h2>
         <router-link :to="`/user/${recipe.user.username}`">
           By {{ recipe.user.username }} ({{ recipe.user.own_recipes }})</router-link>
@@ -26,8 +26,7 @@
       :class="(recipe.user.username === this.$store.state.userData.username) ? 'own-recipe' :
           checkSaved(recipe) ? 'saved-recipe' : ''"
       :to="'/recipe/' + recipe.id + '/'" class="recipe-card">
-        <!-- <img :src="recipe.image" alt=""> -->
-        <img :src="recipe.imageUrl" alt="">
+        <img :src="makeUrl(recipe.imageUrl)" alt="">
         <h2>{{ recipe.name }}</h2>
         <router-link :to="`/user/${recipe.user.username}`">
           By {{ recipe.user.username }} ({{ recipe.user.own_recipes }})</router-link>
@@ -42,7 +41,7 @@
           checkSaved(recipe) ? 'saved-recipe' : ''"
       :to="'/recipe/' + recipe.id + '/'" class="recipe-card">
         <!-- <img :src="recipe.image" alt=""> -->
-        <img :src="recipe.imageUrl" alt="">
+        <img :src="makeUrl(recipe.imageUrl)" alt="">
         <h2>{{ recipe.name }}</h2>
       </router-link>
     </div>
@@ -50,6 +49,7 @@
 </template>
 
 <script>
+import constantService from '@/services/constantService';
 import backendService from '@/services/backendService';
 
 // @ is an alias to /src
@@ -73,6 +73,9 @@ export default {
   components: {
   },
   methods: {
+    makeUrl(url) {
+      return `${constantService.baseUrl}/app/image/${url}`;
+    },
     SavedRecipes() {
       backendService.getSaved(this.$store.state.userData.jwt).then((response) => {
         const data = response.clone().json().catch(() => response.text());

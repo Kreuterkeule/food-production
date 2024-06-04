@@ -12,7 +12,7 @@
             <label for="password">Password
                 <input v-model="password" type="password" id="password" name="password" required>
             </label>
-            <button type="submit" @touchend="signUp()"
+            <button type="submit"
             @click.prevent="signUp()">Sign Up</button>
         </form>
     </div>

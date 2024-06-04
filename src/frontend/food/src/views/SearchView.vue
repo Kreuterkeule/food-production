@@ -7,15 +7,15 @@
           @input="getRecipes(); this.getRecipes()" placeholder="search">
         </label>
         <div>
-          <button @touchend="this.page=1; this.getRecipes()"
+          <button
           @click.prevent="this.page=1; this.getRecipes()">&lt;&lt;&lt;</button>
-          <button @touchend="if (this.page > 1) this.page--; this.getRecipes()"
+          <button
           @click.prevent="if (this.page > 1) this.page--; this.getRecipes()">&lt;</button>
           <label for="page">
             <input @input="this.resizeInput('pageInput')"
             ref="pageInput" @change="this.getRecipes()" id="page" v-model="page" type="text">
           </label>
-          <button @touchend="this.page++; this.getRecipes()"
+          <button
           @click.prevent="this.page++; this.getRecipes()">&gt;</button>
           <label for="page">
             <input @input="this.resizeInput('pageSizeInput'); this.getRecipes()"
@@ -32,7 +32,7 @@
           checkSaved(recipe) ? 'saved-recipe' : ''"
         :to="'/recipe/' + recipe.id + '/'" class="recipe-card">
           <!-- <img :src="recipe.image" alt=""> -->
-          <img :src="recipe.imageUrl" alt="">
+          <img :src="makeUrl(recipe.imageUrl)" alt="">
           <h2>{{ recipe.name }}</h2>
           <router-link :to="`/user/${recipe.user.username}`">
             By {{ recipe.user.username }} ({{ recipe.user.own_recipes }})</router-link>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import constantService from '@/services/constantService';
 import backendService from '@/services/backendService';
 import { defineComponent } from 'vue';
 
@@ -63,6 +64,9 @@ export default defineComponent({
     this.getRecipes();
   },
   methods: {
+    makeUrl(url) {
+      return `${constantService.baseUrl}/app/image/${url}`;
+    },
     checkSaved(recipe) {
       if (this.$store.state.userData.loggedIn) {
         return recipe.usersSaved.map((e) => e.username)

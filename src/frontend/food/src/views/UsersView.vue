@@ -7,15 +7,15 @@
             name="searchString" required placeholder="search">
           </label>
           <div>
-            <button @touchend="this.page=1; this.getUsers()"
+            <button
             @click.prevent="this.page=1; this.getUsers()">&lt;&lt;&lt;</button>
-            <button @touchend="if (this.page > 1) this.page--; this.getUsers()"
+            <button
             @click.prevent="if (this.page > 1) this.page--; this.getUsers()">&lt;</button>
             <label for="page">
               <input @input="this.resizeInput('pageInput'); this.getUsers()"
               ref="pageInput" @change="this.getUsers()" id="page" v-model="page" type="text">
             </label>
-            <button @touchend="this.page++; this.getUsers()"
+            <button
             @click.prevent="this.page++; this.getUsers()">&gt;</button>
             <label for="page">
               <input @input="this.resizeInput('pageSizeInput'); this.getUsers()"
@@ -26,7 +26,7 @@
         </div>
         <div class="users">
             <table v-if="this.users.length > 0">
-                <tr @touchend="this.$router.push(`/user/${user.username}`)"
+                <tr
                 @click.prevent="this.$router.push(`/user/${user.username}`)"
                 v-for="user in this.users" :key="user.id" class="user">
                   {{ user.username }}

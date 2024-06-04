@@ -7,10 +7,10 @@
           :to="`/user/${recipe.user !== undefined ? recipe.user.username : ''}`">
             By {{ recipe.user !== undefined ?
             `${recipe.user.username} (${recipe.user.own_recipes})` :'' }}</router-link>
-          <img :src="recipe.imageUrl" alt="">
+          <img :src="makeUrl(recipe.imageUrl)" alt="">
           <h2>Ingredients</h2>
           <table v-if="this.recipe !== 0">
-            <tr @touchend="this.$router.push('/ingredient/' + ia.ingredient.name)"
+            <tr
             @mousedown="this.$router.push('/ingredient/' + ia.ingredient.name)"
              v-for="ia in prepareIngredients(recipe.ingredients)" :key="ia.ingredient">
               <td>{{ ia.ingredient.name }}</td>
@@ -28,24 +28,22 @@
           </router-link>
         </div>
         <div class="recipe-menu">
-          <button class="not-authenticated" @touchend="copyLink()"
+          <button class="not-authenticated"
           @click.prevent="copyLink()">
             Share
           </button>
           <button v-if="!checkSaved && !checkOwn" class="not-authenticated"
-          @touchend="save()"
           @click.prevent="save()">
             Save
           </button>
           <button v-if="checkSaved" class="not-authenticated"
-          @touchend="unsave()"
           @click.prevent="unsave()">
             Unsave
           </button>
           <router-link class="edit-button"
           v-if="checkOwn"
           :to="`/editRecipe/${recipe.id}`">Edit</router-link>
-          <button v-if="checkOwn" class="delete-btn" @touchend="deleteRecipe()"
+          <button v-if="checkOwn" class="delete-btn"
           @click.prevent="deleteRecipe()">Delete</button>
         </div>
       </div>
@@ -54,6 +52,7 @@
 <script>
 import { defineComponent } from 'vue';
 import backendService from '@/services/backendService';
+import constantService from '@/services/constantService';
 
 export default defineComponent({
   name: 'RecipeView',
@@ -69,6 +68,9 @@ export default defineComponent({
     this.getRecipe();
   },
   methods: {
+    makeUrl(url) {
+      return `${constantService.baseUrl}/app/image/${url}`;
+    },
     unsave() {
       backendService.unsaveFromUser(this.$store.state.userData.jwt, this.recipe.id)
         .then((response) => {

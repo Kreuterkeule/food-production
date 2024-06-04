@@ -8,9 +8,9 @@
             <label for="password">Password
                 <input v-model="password" type="password" id="password" name="password" required>
             </label>
-            <button type="submit" @touchend="this.login()"
+            <button type="submit"
             @click.prevent="this.login()">Login</button>
-            <button type="submit" @touchend="this.login()"
+            <button type="submit"
             @click.prevent="this.signUp()">Sign Up</button>
         </form>
     </div>
