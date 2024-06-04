@@ -48,12 +48,9 @@ export default defineComponent({
   },
   methods: {
     computePageWrapperPadding() {
-      console.log('computing height');
-      console.log('nav height', this.$refs.nav.offsetHeight + 20);
       this.PageWrapperHeight = this.$refs.nav ? `${this.$refs.nav.offsetHeight}px !important` : '64px';
     },
     logout() {
-      console.log('logging out');
       this.$store.commit('logout');
       this.$store.commit('addNotification', {
         message: 'Logged out',

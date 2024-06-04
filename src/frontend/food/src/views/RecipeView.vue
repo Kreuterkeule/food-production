@@ -32,7 +32,8 @@
           @click.prevent="copyLink()">
             Share
           </button>
-          <button v-if="!checkSaved && !checkOwn" class="not-authenticated"
+          <button v-if="!checkSaved && !checkOwn && this.$store.state.userData.loggedIn"
+          class="not-authenticated"
           @click.prevent="save()">
             Save
           </button>
