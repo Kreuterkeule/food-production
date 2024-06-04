@@ -63,9 +63,11 @@ export default {
     };
   },
   mounted() {
-    this.OwnRecipes();
+    if (this.$store.state.userData.loggedIn) {
+      this.OwnRecipes();
+      this.SavedRecipes();
+    }
     this.DailyRecipes();
-    this.SavedRecipes();
   },
   name: 'HomeView',
   components: {
