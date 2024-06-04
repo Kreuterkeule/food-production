@@ -10,7 +10,8 @@
           <img :src="recipe.imageUrl" alt="">
           <h2>Ingredients</h2>
           <table v-if="this.recipe !== 0">
-            <tr @mousedown="this.$router.push('/ingredient/' + ia.ingredient.name)"
+            <tr @touchend="this.$router.push('/ingredient/' + ia.ingredient.name)"
+            @mousedown="this.$router.push('/ingredient/' + ia.ingredient.name)"
              v-for="ia in prepareIngredients(recipe.ingredients)" :key="ia.ingredient">
               <td>{{ ia.ingredient.name }}</td>
               <td>{{ ia.amount }}</td>
@@ -27,19 +28,25 @@
           </router-link>
         </div>
         <div class="recipe-menu">
-          <button class="not-authenticated" @click.prevent="copyLink()">
+          <button class="not-authenticated" @touchend="copyLink()"
+          @click.prevent="copyLink()">
             Share
           </button>
-          <button v-if="!checkSaved && !checkOwn" class="not-authenticated" @click.prevent="save()">
+          <button v-if="!checkSaved && !checkOwn" class="not-authenticated"
+          @touchend="save()"
+          @click.prevent="save()">
             Save
           </button>
-          <button v-if="checkSaved" class="not-authenticated" @click.prevent="unsave()">
+          <button v-if="checkSaved" class="not-authenticated"
+          @touchend="unsave()"
+          @click.prevent="unsave()">
             Unsave
           </button>
           <router-link class="edit-button"
           v-if="checkOwn"
           :to="`/editRecipe/${recipe.id}`">Edit</router-link>
-          <button v-if="checkOwn" class="delete-btn" @click.prevent="deleteRecipe()">Delete</button>
+          <button v-if="checkOwn" class="delete-btn" @touchend="deleteRecipe()"
+          @click.prevent="deleteRecipe()">Delete</button>
         </div>
       </div>
 </template>

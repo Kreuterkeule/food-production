@@ -7,13 +7,16 @@
             name="searchString" required placeholder="search">
           </label>
           <div>
-            <button @click.prevent="this.page=1; this.getUsers()">&lt;&lt;&lt;</button>
-            <button @click.prevent="if (this.page > 1) this.page--; this.getUsers()">&lt;</button>
+            <button @touchend="this.page=1; this.getUsers()"
+            @click.prevent="this.page=1; this.getUsers()">&lt;&lt;&lt;</button>
+            <button @touchend="if (this.page > 1) this.page--; this.getUsers()"
+            @click.prevent="if (this.page > 1) this.page--; this.getUsers()">&lt;</button>
             <label for="page">
               <input @input="this.resizeInput('pageInput'); this.getUsers()"
               ref="pageInput" @change="this.getUsers()" id="page" v-model="page" type="text">
             </label>
-            <button @click.prevent="this.page++; this.getUsers()">&gt;</button>
+            <button @touchend="this.page++; this.getUsers()"
+            @click.prevent="this.page++; this.getUsers()">&gt;</button>
             <label for="page">
               <input @input="this.resizeInput('pageSizeInput'); this.getUsers()"
               ref="pageSizeInput" @change="this.getUsers()"
@@ -23,7 +26,8 @@
         </div>
         <div class="users">
             <table v-if="this.users.length > 0">
-                <tr @click.prevent="this.$router.push(`/user/${user.username}`)"
+                <tr @touchend="this.$router.push(`/user/${user.username}`)"
+                @click.prevent="this.$router.push(`/user/${user.username}`)"
                 v-for="user in this.users" :key="user.id" class="user">
                   {{ user.username }}
                 </tr>

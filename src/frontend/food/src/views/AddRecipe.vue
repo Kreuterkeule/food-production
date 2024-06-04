@@ -31,13 +31,15 @@
             ref="amountInput"
             v-model="amount" type="text" id="amount" name="amount">
           </label>
-          <button @click.prevent="addIngredient(true)">Add Ingredient</button>
+          <button @touchend="addIngredient(true)"
+          @click.prevent="addIngredient(true)">Add Ingredient</button>
         </div>
         <table>
           <tr v-for="ingredient in ingredient_amount" :key="ingredient.ingredient">
             <td>{{ ingredient.ingredient }}</td>
             <td>{{ ingredient.amount }}</td>
-            <td><button @click.prevent="removeIngredient(ingredient)">x</button></td>
+            <td><button @touchend="removeIngredient(ingredient)"
+              @click.prevent="removeIngredient(ingredient)">x</button></td>
           </tr>
         </table>
         <label for="name">
@@ -75,12 +77,13 @@
           </ul>
         </div>
           <div class="tags">
-            <button
+            <button @touchend="removeTag(tag)"
             @click.prevent="removeTag(tag)" class="tag" v-for="tag in tags" :key="tag">
               {{ tag }} ({{ getTagUsage(tag) }})
             </button>
           </div>
-          <button @click.prevent="addRecipe()">
+          <button @touchend="addRecipe()"
+          @click.prevent="addRecipe()">
             {{ (this.$route.params.id) ? 'Update Recipe' : 'Add Recipe' }}
           </button>
       </form>

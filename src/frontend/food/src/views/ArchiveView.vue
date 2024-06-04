@@ -5,13 +5,16 @@
         <h1 v-else>All Recipes</h1>
         <div class="controls">
           <div>
-            <button @click.prevent="this.page=1; this.getRecipes()">&lt;&lt;&lt;</button>
-            <button @click.prevent="if (this.page > 1) this.page--; this.getRecipes()">&lt;</button>
+            <button @touchend="this.page=1; this.getRecipes()"
+            @click.prevent="this.page=1; this.getRecipes()">&lt;&lt;&lt;</button>
+            <button @touchend="if (this.page > 1) this.page--; this.getRecipes()"
+            @click.prevent="if (this.page > 1) this.page--; this.getRecipes()">&lt;</button>
             <label for="page">
               <input @input="this.resizeInput('pageInput')"
               ref="pageInput" @change="this.getRecipes()" id="page" v-model="page" type="text">
             </label>
-            <button @click.prevent="this.page++; this.getRecipes()">&gt;</button>
+            <button @touchend="this.page++; this.getRecipes()"
+            @click.prevent="this.page++; this.getRecipes()">&gt;</button>
             <label for="page">
               <input @input="this.resizeInput('pageSizeInput')"
               ref="pageSizeInput" @change="this.getRecipes()"
