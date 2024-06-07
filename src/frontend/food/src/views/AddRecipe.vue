@@ -118,6 +118,8 @@ export default defineComponent({
       ingredientSelected: false,
       amountSelected: false,
       recipe: {},
+      newImage: false,
+      oldImageUrl: '',
     };
   },
   components: {
@@ -133,9 +135,10 @@ export default defineComponent({
           this.name = d.name;
           this.text = d.text;
           this.ingredient_amount = this.deserializeIngredientAmount(d.ingredients);
-          this.image = this.makeUrl(d.image);
+          this.image = this.makeUrl(d.imageUrl);
           this.time = d.time;
           this.tags = this.deserializeTags(d.tags);
+          this.oldImageUrl = d.imageUrl;
         });
       });
     },
@@ -229,6 +232,7 @@ export default defineComponent({
       fileInput.value = '';
     },
     previewFileName() {
+      this.newImage = true;
       const fileInput = document.querySelector('.file-input');
       const fileLabel = document.querySelector('.file-input-label');
       const textNode = fileLabel.childNodes[0];
@@ -297,14 +301,14 @@ export default defineComponent({
         });
     },
     stagePutImage(tags) {
-      if (this.$route.params.id && this.image_raw === null) {
+      if (this.$route.params.id && !this.newImage) {
         const recipe = {
           name: this.name,
           text: this.text,
           time: this.time,
           tag_ids: tags.map((t) => t.id),
           ingredient_amount: {},
-          imageUrl: this.image,
+          imageUrl: this.oldImageUrl,
         };
         this.ingredient_amount.forEach((i) => {
           recipe.ingredient_amount[this.allIngredients
